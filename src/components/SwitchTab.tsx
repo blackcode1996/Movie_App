@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const SwitchTab = () => {
-  const [activeTab, setActiveTab] = useState('Day');
+interface SwitchTabProps {
+  activeTab: string;
+  setActiveTab: React.Dispatch<React.SetStateAction<string>>;
+}
 
-  const handleTabChange = (tab: React.SetStateAction<string>) => {
-    setActiveTab(tab);
-  };
-
+const SwitchTab: React.FC<SwitchTabProps> = ({ activeTab, setActiveTab }) => {
   return (
     <div className="w-[300px] max-w-sm rounded flex flex-col">
       <div className="mx-8 shadow-lg rounded-full h-10 mt-4 flex p-1 relative items-center">
         <div className="w-full flex justify-center">
           <button
-            onClick={() => handleTabChange('Day')}
+            onClick={() => setActiveTab('Day')}
             className={`flex-1 text-center py-2 rounded-full transition ${
               activeTab === 'Day' ? 'bg-gray-200' : 'bg-transparent'
             }`}
@@ -22,7 +21,7 @@ const SwitchTab = () => {
         </div>
         <div className="w-full flex justify-center">
           <button
-            onClick={() => handleTabChange('Week')}
+            onClick={() => setActiveTab('Week')}
             className={`flex-1 text-center py-2 rounded-full transition ${
               activeTab === 'Week' ? 'bg-gray-200' : 'bg-transparent'
             }`}

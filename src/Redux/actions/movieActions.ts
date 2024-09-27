@@ -1,31 +1,47 @@
-
+// movieActions.ts
+import { Dispatch } from "redux";
 import axios from "axios";
 import {
   FETCH_TRENDING_MOVIES_REQUEST,
   FETCH_TRENDING_MOVIES_SUCCESS,
   FETCH_TRENDING_MOVIES_FAILURE,
+  FETCH_POPULAR_MOVIES_REQUEST,
+  FETCH_POPULAR_MOVIES_SUCCESS,
+  FETCH_POPULAR_MOVIES_FAILURE,
   MovieActionTypes,
 } from "../actionTypes/movieActionTypes";
-import { Dispatch } from "redux";
 
-const API_KEY = "your_tmdb_api_key"; 
-const BASE_URL = "https://api.themoviedb.org/3";
+const API_KEY = import.meta.env.VITE_API_KEY;
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
-export const fetchTrendingMovies = () => {
+export const fetchMovies = (timeFrame: string) => {
   return async (dispatch: Dispatch<MovieActionTypes>) => {
     dispatch({ type: FETCH_TRENDING_MOVIES_REQUEST });
+    dispatch({ type: FETCH_POPULAR_MOVIES_REQUEST });
 
     try {
-      const response = await axios.get(
-        `${BASE_URL}/trending/movie/week?api_key=${API_KEY}`
-      );
+      const trendingUrl = `${BASE_URL}/trending/movie/${timeFrame}?language=en-US&page=1&api_key=${API_KEY}`;
+      const trendingResponse = await axios.get(trendingUrl);
+
+      const popularUrl = `${BASE_URL}/movie/popular?language=en-US&page=1&api_key=${API_KEY}`;
+      const popularResponse = await axios.get(popularUrl);
+
+      
       dispatch({
         type: FETCH_TRENDING_MOVIES_SUCCESS,
-        payload: response.data.results,
+        payload: trendingResponse.data.results,
+      });
+      dispatch({
+        type: FETCH_POPULAR_MOVIES_SUCCESS,
+        payload: popularResponse.data.results,
       });
     } catch (error: any) {
       dispatch({
         type: FETCH_TRENDING_MOVIES_FAILURE,
+        error: error.message,
+      });
+      dispatch({
+        type: FETCH_POPULAR_MOVIES_FAILURE,
         error: error.message,
       });
     }

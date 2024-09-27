@@ -2,6 +2,7 @@
 import Navbar from '../components/Navbar'
 import HeroSection from '../components/HeroSection'
 import CardWrapper from '../components/CardWrapper'
+import Footer from '../components/Footer'
 
 const Home = () => {
   return (
@@ -9,6 +10,7 @@ const Home = () => {
       <Navbar/>
       <HeroSection/>
       <CardWrapper/>
+      <Footer/>
     </div>
   )
 }

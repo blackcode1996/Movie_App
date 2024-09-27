@@ -10,6 +10,8 @@ interface CardData {
 }
 
 const CardWrapper: React.FC = () => {
+
+  
   const cardData: CardData[] = [
     {
       title: "Deadpool & Wolverine",
@@ -80,7 +82,7 @@ const CardWrapper: React.FC = () => {
   };
 
   return (
-    <div className="m-auto w-[100%] md:w-[60%] bg-white rounded shadow-lg p-4 mb-8">
+    <div className="m-auto w-[100%] md:w-[60%] bg-slate-100 rounded shadow-lg p-4 mb-8">
       <section className="overflow-hidden">
         <header className="flex justify-between items-center border-b pb-4">
           <p className="text-lg font-semibold px-4">Trending</p>

@@ -35,7 +35,7 @@ export const movieReducer = (
           return {
               ...state,
               trendingLoading: true,
-              trendingError: null, // Clear any previous error
+              trendingError: null,
           };
       case FETCH_TRENDING_MOVIES_SUCCESS:
           return {

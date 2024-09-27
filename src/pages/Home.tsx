@@ -1,14 +1,25 @@
-// Home.tsx
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
 import CardWrapper from "../components/CardWrapper";
 import Footer from "../components/Footer";
-import { fetchMovies } from "../Redux/actions/movieActions";
+import { fetchTrendingMovies, fetchPopularMovies } from "../Redux/actions/movieActions";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 const Home = () => {
+  const dispatch = useDispatch();
+  const [activeTrendingTab, setActiveTrendingTab] = useState("Day");
+  const [activePopularTab, setActivePopularTab] = useState("Movies");
+    
+  const handleTrendingFetchMovies = (category: string) => {
+    dispatch(fetchTrendingMovies(category));
+  };
+  
 
-  const [active,setActiveTab] = useState<string>("");
+  const handlePopularFetchMovies = (category: string) => {
+    dispatch(fetchPopularMovies(category));
+  };
+
 
   return (
     <div>
@@ -16,12 +27,17 @@ const Home = () => {
       <HeroSection />
       <CardWrapper 
         category={"trending"} 
-        fetchMovies={(timeFrame) => fetchMovies(timeFrame)} 
-        timeFrame="Day" 
+        fetchMovies={handleTrendingFetchMovies} 
+        activeTab={activeTrendingTab} 
+        setActiveTab={setActiveTrendingTab} 
+        options={["Day", "Week"]}
       />
       <CardWrapper 
         category={"popular"} 
-        fetchMovies={fetchMovies} 
+        fetchMovies={handlePopularFetchMovies} 
+        activeTab={activePopularTab} 
+        setActiveTab={setActivePopularTab} 
+        options={["Movies", "TV Shows"]}
       />
       <Footer />
     </div>

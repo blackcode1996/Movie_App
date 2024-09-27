@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import SwitchTab from "./SwitchTab";
 import Cards from "./Cards";
 import SkeletonCard from "./Skeleton/SkeletonCard";
@@ -7,22 +7,30 @@ import { RootState } from "../Redux/store";
 
 interface CardWrapperProps {
   category: string; 
-  fetchMovies: (timeFrame?: string) => void; 
-  timeFrame?: string;
+  fetchMovies: (category: string) => void;
+  activeTab: string; 
+  setActiveTab: React.Dispatch<React.SetStateAction<string>>;
+  options: string[];
 }
 
-const CardWrapper: React.FC<CardWrapperProps> = ({ category, fetchMovies, timeFrame }) => {
-  const dispatch = useDispatch();
-  const { trendingLoading, trendingError, trendingMovies, popularLoading,popularError, popularMovies} = useSelector((state: RootState) => state.movie);
+const CardWrapper: React.FC<CardWrapperProps> = React.memo(({ 
+  category, 
+  fetchMovies, 
+  activeTab, 
+  setActiveTab, 
+  options 
+}) => {
 
-  console.log({trendingMovies});
-  console.log({popularMovies});
-
-  const [activeTab, setActiveTab] = useState(timeFrame || 'Day');
+  const {
+    trendingLoading,
+    trendingMovies,
+    popularLoading,
+    popularMovies,
+  } = useSelector((state: RootState) => state.movie);
 
   useEffect(() => {
-    dispatch(fetchMovies(activeTab.toLowerCase()));
-  }, [dispatch, activeTab, fetchMovies]);
+    fetchMovies(activeTab && activeTab.toLowerCase());
+  }, [activeTab, fetchMovies]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsToShow = 3;
@@ -35,9 +43,9 @@ const CardWrapper: React.FC<CardWrapperProps> = ({ category, fetchMovies, timeFr
 
   const handleNext = () => {
     setFade(true);
-    const movies = category === "trending" ? trendingMovies : popularMovies;
+    const movies: any = category === "trending" ? trendingMovies : popularMovies;
     setCurrentIndex((prevIndex) => {
-      return (prevIndex < ( movies.length - itemsToShow)) ? prevIndex + itemsToShow : prevIndex;
+      return (prevIndex < (movies.length - itemsToShow)) ? prevIndex + itemsToShow : prevIndex;
     });
   };
 
@@ -47,13 +55,12 @@ const CardWrapper: React.FC<CardWrapperProps> = ({ category, fetchMovies, timeFr
 
   const movies = category === "trending" ? trendingMovies : popularMovies;
 
-
   return (
     <div className="m-auto w-[100%] md:w-[60%] bg-slate-100 rounded shadow-lg p-4 mb-8">
       <section className="overflow-hidden">
         <header className="flex justify-between items-center border-b pb-4">
           <p className="text-lg font-semibold px-4">{category.charAt(0).toUpperCase() + category.slice(1)}</p>
-          <SwitchTab activeTab={activeTab} setActiveTab={setActiveTab} />
+          <SwitchTab activeTab={activeTab} setActiveTab={setActiveTab} options={options} />
         </header>
         <div className="relative">
           <button
@@ -74,11 +81,11 @@ const CardWrapper: React.FC<CardWrapperProps> = ({ category, fetchMovies, timeFr
                 </div>
               ))
             ) : (
-              movies && movies.length > 0 && movies.slice(currentIndex, currentIndex + itemsToShow).map((movie, index) => (
+              movies && movies.slice(currentIndex, currentIndex + itemsToShow).map((movie: any, index: number) => (
                 <div className="w-[calc(33.333%_-_16px)]" key={index}>
                   <Cards
-                    title={movie.title}
-                    date={movie.release_date}
+                    title={movie.title || movie.name}
+                    date={movie.release_date || movie.first_air_date}
                     imageUrl={`https://image.tmdb.org/t/p/original${movie.poster_path}`} 
                     rating={movie.vote_average.toString()} 
                   />
@@ -97,6 +104,6 @@ const CardWrapper: React.FC<CardWrapperProps> = ({ category, fetchMovies, timeFr
       </section>
     </div>
   );
-};
+});
 
 export default CardWrapper;

@@ -1,16 +1,18 @@
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
     <nav className="sticky top-0 z-10 backdrop-filter backdrop-blur-lg bg-opacity-30">
       <div className="max-w-5xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <span className="text-2xl text-white font-semibold">
-            Movipedia
-          </span>
+          <Link to={"/"}>
+            <span className="text-2xl text-white font-semibold">Movipedia</span>
+          </Link>
+
           <div className="flex space-x-4 text-white">
-            <a>
+            <Link to={"/movies"}>
               <span>Movies</span>
-            </a>
+            </Link>
             <a>
               <span>TV Shows</span>
             </a>
@@ -25,11 +27,6 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
-
-
-
 
 // <nav className="w-[100%] border border-red-800 fixed h-[60px] flex items-center px-40 bg-white">
 //   <div className="flex items-center justify-between w-[100%] border border-green-600">

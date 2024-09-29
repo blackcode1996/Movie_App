@@ -26,6 +26,8 @@ const CardWrapper: React.FC<CardWrapperProps> = React.memo(({
     trendingMovies,
     popularLoading,
     popularMovies,
+    topRatedLoading,
+    topRatedMovies,
   } = useSelector((state: RootState) => state.movie);
 
   useEffect(() => {
@@ -43,7 +45,7 @@ const CardWrapper: React.FC<CardWrapperProps> = React.memo(({
 
   const handleNext = () => {
     setFade(true);
-    const movies: any = category === "trending" ? trendingMovies : popularMovies;
+    const movies: any = category === "trending" ? trendingMovies : category === "popular" ? popularMovies : topRatedMovies;
     setCurrentIndex((prevIndex) => {
       return (prevIndex < (movies.length - itemsToShow)) ? prevIndex + itemsToShow : prevIndex;
     });
@@ -53,7 +55,17 @@ const CardWrapper: React.FC<CardWrapperProps> = React.memo(({
     setFade(false);
   };
 
-  const movies = category === "trending" ? trendingMovies : popularMovies;
+  const movies = category === "trending" 
+    ? trendingMovies 
+    : category === "popular" 
+    ? popularMovies 
+    : topRatedMovies;
+
+  const isLoading = category === "trending" 
+    ? trendingLoading 
+    : category === "popular" 
+    ? popularLoading 
+    : topRatedLoading;
 
   return (
     <div className="m-auto w-[100%] md:w-[60%] bg-slate-100 rounded shadow-lg p-4 mb-8">
@@ -74,7 +86,7 @@ const CardWrapper: React.FC<CardWrapperProps> = React.memo(({
             className={`flex space-x-6 mt-4 py-12 transition-opacity duration-500 ${fade ? "opacity-0" : "opacity-100"}`}
             onTransitionEnd={onTransitionEnd}
           >
-            {trendingLoading || popularLoading ? (
+            {isLoading ? (
               Array.from({ length: itemsToShow }).map((_, index) => (
                 <div className="w-[calc(33.333%_-_16px)]" key={index}>
                   <SkeletonCard />

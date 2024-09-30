@@ -1,4 +1,4 @@
-
+import React, { useCallback, useState } from "react";
 import HeroSection from "../../components/HeroSection";
 import CardWrapper from "../../components/CardWrapper";
 import {
@@ -6,7 +6,6 @@ import {
   fetchPopularMovies,
   fetchTopRatedMovies,
 } from "../../Redux/actions/movieActions";
-import { useState } from "react";
 import { useDispatch } from "react-redux";
 
 const Home = () => {
@@ -15,17 +14,26 @@ const Home = () => {
   const [activePopularTab, setActivePopularTab] = useState("Movies");
   const [activeTopRatedTab, setActiveTopRatedTab] = useState("Movies");
 
-  const handleTrendingFetchMovies = (category: string) => {
-    dispatch(fetchTrendingMovies(category));
-  };
+  const handleTrendingFetchMovies = useCallback(
+    (category: string) => {
+      dispatch(fetchTrendingMovies(category));
+    },
+    [activeTrendingTab]
+  );
 
-  const handlePopularFetchMovies = (category: string) => {
-    dispatch(fetchPopularMovies(category));
-  };
+  const handlePopularFetchMovies = useCallback(
+    (category: string) => {
+      dispatch(fetchPopularMovies(category));
+    },
+    [activePopularTab]
+  );
 
-  const handleTopRatedFetchMovies = (category: string) => {
-    dispatch(fetchTopRatedMovies(category));
-  };
+  const handleTopRatedFetchMovies = useCallback(
+    (category: string) => {
+      dispatch(fetchTopRatedMovies(category));
+    },
+    [activeTopRatedTab]
+  );
 
   return (
     <div>

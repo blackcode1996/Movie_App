@@ -6,7 +6,6 @@ interface SelectorProps {
 }
 
 const Selector: React.FC<SelectorProps> = ({ tags }) => {
-  console.log(tags);
   const [query, setQuery] = useState<string>("");
   const [selected, setSelected] = useState<string[]>([]);
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
